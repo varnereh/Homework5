@@ -32,7 +32,7 @@ def parse_data(filename):
         reader = csv.DictReader(file, delimiter='\t')
         return [row for row in reader]
     
-    
+
 """_______________________________________________Common Cities________________________________________________________________"""    
 
 
@@ -53,6 +53,10 @@ def get_common_cities(zip_filename, states_filename):
     return sorted(set.intersection(*city_state_map.values()))
 
 
+def write_common_cities(cities, filename):
+    """Write list of common cities to CommonCityNames.txt"""
+    with open(filename, 'w') as file:
+        file.writelines(f"{city}\n" for city in cities)
 
 if __name__ == "__main__": 
     start_time = time.perf_counter()  # Do not remove this line
@@ -65,6 +69,9 @@ if __name__ == "__main__":
 
     # write your code here
     
+    # Common Cities
+    common_cities = get_common_cities('zipcodes.txt', 'states.txt')
+    write_common_cities(common_cities, 'CommonCityNames.txt')
 
 
     '''
