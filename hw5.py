@@ -68,6 +68,15 @@ def get_lat_lon(zip_filename, zips_filename):
     with open(zips_filename, 'r') as file:
         target_zips = set(file.read().strip().split())
 
+    # use dictionary comprehension to gather relevant data. 
+    # ChatGPT assisted me in making sure this was correct
+    zip_data = parse_data(zip_filename)
+    lat_lon_dictionary = {
+        row['Zipcode']: f"{row['Lat']} {row['Long']}"
+        for row in zip_data if row['Zipcode'] in target_zips
+    }
+    return lat_lon_dictionary
+
 
 
 
