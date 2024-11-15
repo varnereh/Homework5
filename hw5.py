@@ -77,7 +77,10 @@ def get_lat_lon(zip_filename, zips_filename):
     }
     return lat_lon_dictionary
 
-
+def write_lat_lon_data(lat_lon_map, filename):
+    """Write lat lon data to LatLon.txt"""
+    with open(filename, 'w') as file:
+        file.writelines(f"{lat_lon}\n" for lat_lon in lat_lon_map.values())
 
 
 
@@ -96,6 +99,9 @@ if __name__ == "__main__":
     common_cities = get_common_cities('zipcodes.txt', 'states.txt')
     write_common_cities(common_cities, 'CommonCityNames.txt')
 
+    # LatLon
+    lat_lon_map = get_lat_lon('zipcodes.txt', 'zips.txt')
+    write_lat_lon_data(lat_lon_map, 'LatLon.txt')
 
     '''
     Inside the __main__, do not add any codes after this line.
