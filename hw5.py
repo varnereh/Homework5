@@ -45,6 +45,7 @@ def get_common_cities(zip_filename, states_filename):
     # use dictionary comprehension to gather data. ChatGPT assisted me in doing this
     zipcodes = parse_data(zip_filename)
     city_state_map = {
+        # Picking each city in the zipcodes rows only if the corresponding states are equal
         state: {row['City'] for row in zipcodes if row['State'] == state}
         for state in target_states
     }
@@ -55,6 +56,7 @@ def get_common_cities(zip_filename, states_filename):
 
 def write_common_cities(cities, filename):
     """Write list of common cities to CommonCityNames.txt"""
+    # open file and print in format
     with open(filename, 'w') as file:
         file.writelines(f"{city}\n" for city in cities)
 
@@ -68,10 +70,12 @@ def get_lat_lon(zip_filename, zips_filename):
     with open(zips_filename, 'r') as file:
         target_zips = set(file.read().strip().split())
 
-    # use dictionary comprehension to gather relevant data. 
+    # use dictionary comprehension to gather relevant data for lat lon 
     # ChatGPT assisted me in making sure this was correct
     zip_data = parse_data(zip_filename)
     lat_lon_dictionary = {
+        # make a new dictionary where the keys are zip codes and the 
+        # values are strings containing the lat and long
         row['Zipcode']: f"{row['Lat']} {row['Long']}"
         for row in zip_data if row['Zipcode'] in target_zips
     }
@@ -80,6 +84,7 @@ def get_lat_lon(zip_filename, zips_filename):
 def write_lat_lon_data(lat_lon_map, filename):
     """Write lat lon data to LatLon.txt"""
     with open(filename, 'w') as file:
+        # open file and print in format
         file.writelines(f"{lat_lon}\n" for lat_lon in lat_lon_map.values())
 
 
@@ -96,6 +101,9 @@ def get_citystates(zipcodes, cities_file):
     # ChatGPT assisted me in condensing this to this solution
     city_states_dictionary = {
         # it's just sql at this point
+        # create new dictionary where the keys are cities and the 
+        # values are sets of states where the city appears. 
+        # sort out based on alphabetical order, removal of duplicates, etc
         city: sorted(set(entry['State'] for entry in zipcodes if entry['City'] == city))
         for city in cities if any(entry['City'] == city for entry in zipcodes)
     }
@@ -107,12 +115,13 @@ def write_citystates(city_states, output_file, cities):
     """Write states containing the city to CityStates.txt"""
     with open(output_file, 'w') as file:
         # ChatGPT assisted slightly with the formatting of this
+        # write in format
         file.writelines(
             ' '.join(city_states.get(city, [])) + '\n'
             for city in cities
         )
 
-        
+
 
 if __name__ == "__main__": 
     start_time = time.perf_counter()  # Do not remove this line
@@ -120,8 +129,6 @@ if __name__ == "__main__":
     Inisde the __main__, do not add any codes before this line.
     -----------------------------------------------------------
     '''
-
-    
 
     # write your code here
 
@@ -132,6 +139,10 @@ if __name__ == "__main__":
     # LatLon
     lat_lon_map = get_lat_lon('zipcodes.txt', 'zips.txt')
     write_lat_lon_data(lat_lon_map, 'LatLon.txt')
+
+    # CityStates
+    city_states_map, cities = get_citystates(parse_data('zipcodes.txt'), 'cities.txt')
+    write_citystates(city_states_map, 'CityStates.txt', cities)
 
     '''
     Inside the __main__, do not add any codes after this line.
