@@ -103,7 +103,16 @@ def get_citystates(zipcodes, cities_file):
     return city_states_dictionary, cities
 
 
+def write_citystates(city_states, output_file, cities):
+    """Write states containing the city to CityStates.txt"""
+    with open(output_file, 'w') as file:
+        # ChatGPT assisted slightly with the formatting of this
+        file.writelines(
+            ' '.join(city_states.get(city, [])) + '\n'
+            for city in cities
+        )
 
+        
 
 if __name__ == "__main__": 
     start_time = time.perf_counter()  # Do not remove this line
