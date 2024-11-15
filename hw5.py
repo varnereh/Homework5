@@ -58,6 +58,20 @@ def write_common_cities(cities, filename):
     with open(filename, 'w') as file:
         file.writelines(f"{city}\n" for city in cities)
 
+
+"""_______________________________________________Lat Lon_______________________________________________________________________"""
+
+
+def get_lat_lon(zip_filename, zips_filename):
+    """Return a dictionary with zip codes as keys and lat and lon as values"""
+    # read zip codes from zips.txt
+    with open(zips_filename, 'r') as file:
+        target_zips = set(file.read().strip().split())
+
+
+
+
+
 if __name__ == "__main__": 
     start_time = time.perf_counter()  # Do not remove this line
     '''
@@ -68,7 +82,7 @@ if __name__ == "__main__":
     
 
     # write your code here
-    
+
     # Common Cities
     common_cities = get_common_cities('zipcodes.txt', 'states.txt')
     write_common_cities(common_cities, 'CommonCityNames.txt')
