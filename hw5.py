@@ -83,6 +83,27 @@ def write_lat_lon_data(lat_lon_map, filename):
         file.writelines(f"{lat_lon}\n" for lat_lon in lat_lon_map.values())
 
 
+"""_______________________________________________Citystates____________________________________________________________________"""
+
+
+def get_citystates(zipcodes, cities_file):
+    """Parse cities.txt and create a dictionary of states that contain that city"""
+    # Open and parse
+    with open(cities_file, 'r') as file:
+        cities = [line.strip().upper() for line in file]
+
+    # Use list comprehension and dictionary comprehension to build city_states
+    # ChatGPT assisted me in condensing this to this solution
+    city_states_dictionary = {
+        # it's just sql at this point
+        city: sorted(set(entry['State'] for entry in zipcodes if entry['City'] == city))
+        for city in cities if any(entry['City'] == city for entry in zipcodes)
+    }
+    # return city_states and cities both 
+    return city_states_dictionary, cities
+
+
+
 
 if __name__ == "__main__": 
     start_time = time.perf_counter()  # Do not remove this line
