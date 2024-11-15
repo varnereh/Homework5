@@ -32,7 +32,25 @@ def parse_data(filename):
         reader = csv.DictReader(file, delimiter='\t')
         return [row for row in reader]
     
-"""____________________________________________________________________________________________________________________________"""
+    
+"""_______________________________________________Common Cities________________________________________________________________"""    
+
+
+def get_common_cities(zip_filename, states_filename):
+    """Parse data files and return all common cities"""
+    # load states from states input file
+    with open(states_filename, 'r') as file:
+        target_states = set(file.read().strip().split())
+    
+    # use dictionary comprehension to gather data. ChatGPT assisted me in doing this
+    zipcodes = parse_data(zip_filename)
+    city_state_map = {
+        state: {row['City'] for row in zipcodes if row['State'] == state}
+        for state in target_states
+    }
+    
+    # return the intersection of common cities
+    return sorted(set.intersection(*city_state_map.values()))
 
 
 
